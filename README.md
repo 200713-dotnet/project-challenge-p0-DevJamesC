@@ -1,6 +1,6 @@
 # pizzabox
 
-The goal of the project is to build a Pizza Ordering System.
+The goal of the project is to build a Pizza Ordering System. test
 
 ## architecture (REQUIRED)
 
