@@ -21,25 +21,25 @@ The project should support objects of User, Store, Order, Pizza.
 
 ### store
 
-+ [required] there should exist at least 2 stores for a user to choose from
++ [required] there should exist at least 2 stores for a user to choose from [CHECK]
 + [required] each store should be able to view/list any and all of their completed/placed orders
 + [required] each store should be able to view/list any and all of their sales (amount of revenue weekly or monthly)
 
 ### order
 
-+ [required] each order must be able to view/list/edit its collection of pizzas
-+ [required] each order must be able to compute its pricing
-+ [required] each order must be limited to a total pricing of no more than $250
-+ [required] each order must be limited to a collection of pizzas of no more than 50
++ [required] each order must be able to view/list/edit its collection of pizzas [CHECK]
++ [required] each order must be able to compute its pricing [CHECK]
++ [required] each order must be limited to a total pricing of no more than $250 [CHECK--NOT-DISPLAYED-TO-USERS]
++ [required] each order must be limited to a collection of pizzas of no more than 50 [CHECK--NOT-DISPLAYED-TO-USERS]
 
 ### pizza
 
-+ [required] each pizza must be able to have a crust
-+ [required] each pizza must be able to have a size
-+ [required] each pizza must be able to have toppings
-+ [required] each pizza must be able to compute its pricing
++ [required] each pizza must be able to have a crust [CHECK]
++ [required] each pizza must be able to have a size [CHECK]
++ [required] each pizza must be able to have toppings [CHECK]
++ [required] each pizza must be able to compute its pricing [CHECK]
 + [required] each pizza must have no less than 2 default toppings
-+ [required] each pizza must limit its toppings to no more 5
++ [required] each pizza must limit its toppings to no more 5 [CHECK--NOT-DISPLAYED-TO-USERS]
 
 ### user
 
@@ -49,7 +49,7 @@ The project should support objects of User, Store, Order, Pizza.
 
 ## technologies
 
-+ .NET Core - C#
++ .NET Core - C# [CHECK]
 + .NET Core - EF + SQL
 + .NET Core - xUnit
 
@@ -63,9 +63,9 @@ The project should support objects of User, Store, Order, Pizza.
 
 as a user, i should be able to do this:
 
-+ access the application
-+ see a list of locations
-+ select a location
++ access the application [CHECK]
++ see a list of locations [CHECK]
++ select a location [CHECK]
 + place an order
 + with either custom or preset pizzas
 + if custom
@@ -82,7 +82,7 @@ as a user, i should be able to do this:
 
 as a store, i should be able do this:
 
-+ access the application
++ access the application [CHECK]
 + select options for order history, sales
 + if order history
 + select options for all store orders and orders associated to a user (filtering)

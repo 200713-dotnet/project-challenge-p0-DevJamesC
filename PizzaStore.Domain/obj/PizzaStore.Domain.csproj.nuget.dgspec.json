@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Domain/PizzaStore.Domain.csproj": {}
+    "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Domain/PizzaStore.Domain.csproj": {}
   },
   "projects": {
-    "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Domain/PizzaStore.Domain.csproj": {
+    "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Domain/PizzaStore.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Domain/PizzaStore.Domain.csproj",
+        "projectUniqueName": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Domain/PizzaStore.Domain.csproj",
         "projectName": "PizzaStore.Domain",
-        "projectPath": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Domain/PizzaStore.Domain.csproj",
+        "projectPath": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Domain/PizzaStore.Domain.csproj",
         "packagesPath": "/home/jkc36/.nuget/packages/",
-        "outputPath": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Domain/obj/",
+        "outputPath": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jkc36/.nuget/NuGet/NuGet.Config"
