@@ -28,6 +28,19 @@ namespace PizzaStore.Domain.Models
             Price = price;
         }
 
+        public Pizza(Pizza pizza)
+        {
+            Name = pizza.Name;
+            Toppings= new List<Topping>();
+            foreach (Topping top in pizza.Toppings)
+            {
+                Toppings.Add(top);
+            }
+            Crust = new Crust { CrustName = pizza.Crust.CrustName, Price = pizza.Crust.Price };
+            Size = new Size { SizeName = pizza.Size.SizeName, Price = pizza.Size.Price };
+            Price = pizza.Price;
+        }
+
         public void AddTopping(Topping topping)
         {
             if (Toppings.Count < 5)
@@ -62,6 +75,33 @@ namespace PizzaStore.Domain.Models
                 totalPrice += top.Price;
             }
             return totalPrice;
+        }
+
+        public bool CheckHasTopping(string topName)
+        {
+            foreach (Topping top in Toppings)
+            {
+                if (top.TopName == topName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void RemoveTopping(string topName)
+        {
+            Topping topping = null;
+            foreach (Topping top in Toppings)
+            {
+                if (top.TopName == topName)
+                {
+                    topping = top;
+                    break;
+                }
+            }
+
+            Toppings.Remove(topping);
         }
     }
 }

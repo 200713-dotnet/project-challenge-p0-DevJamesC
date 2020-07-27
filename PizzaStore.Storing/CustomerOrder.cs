@@ -8,6 +8,7 @@ namespace PizzaStore.Storing
         public CustomerOrder()
         {
             FkCustomerOrderCustomer = new HashSet<FkCustomerOrderCustomer>();
+            FkCustomerOrderPizza = new HashSet<FkCustomerOrderPizza>();
         }
 
         public int CustomerOrderId { get; set; }
@@ -17,5 +18,6 @@ namespace PizzaStore.Storing
         public bool? Active { get; set; }
 
         public virtual ICollection<FkCustomerOrderCustomer> FkCustomerOrderCustomer { get; set; }
+        public virtual ICollection<FkCustomerOrderPizza> FkCustomerOrderPizza { get; set; }
     }
 }

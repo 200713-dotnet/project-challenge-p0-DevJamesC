@@ -23,7 +23,9 @@ namespace PizzaStore.Client
             bool terminateProgram = false;
             User currentUser = null;
             int currentEditRemoveIndex = 0;
+            bool editingPizza = false;
             Domain.Models.Pizza CurrentCustomPizza = null;
+            Domain.Models.Pizza CurrentCustomPizzaOld = null;
             var db = new PizzaStoreDbContext();
             do
             {
@@ -217,7 +219,7 @@ namespace PizzaStore.Client
                                     "Cheese",
                                     new List<Domain.Models.Topping>(){
                                         new Domain.Models.Topping("Marinara Sauce",0),
-                                        new Domain.Models.Topping("Cheese",0)
+                                        new Domain.Models.Topping("Regular Cheese",0)
                                         },
                                         new Domain.Models.Crust("Plain", 0),
                                         new Domain.Models.Size("Large", 4),
@@ -230,7 +232,7 @@ namespace PizzaStore.Client
                                     "Pepperoni",
                                    new List<Domain.Models.Topping>(){
                                         new Domain.Models.Topping("Marinara Sauce",0),
-                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Regular Cheese",0),
                                         new Domain.Models.Topping("Pepperoni",1)
                                        },
                                        new Domain.Models.Crust("Plain", 0),
@@ -244,7 +246,7 @@ namespace PizzaStore.Client
                                     "Hawaiian",
                                  new List<Domain.Models.Topping>(){
                                         new Domain.Models.Topping("Marinara Sauce",0),
-                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Regular Cheese",0),
                                         new Domain.Models.Topping("Pineapples",.75),
                                         new Domain.Models.Topping("Ham",1.25)
                                      },
@@ -259,7 +261,7 @@ namespace PizzaStore.Client
                                     "Buffalo Chicken",
                                  new List<Domain.Models.Topping>(){
                                         new Domain.Models.Topping("Marinara Sauce",0),
-                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Regular Cheese",0),
                                         new Domain.Models.Topping("Chicken",2),
                                         new Domain.Models.Topping("Buffalo Hot Sauce",.25)
                                      },
@@ -335,6 +337,8 @@ namespace PizzaStore.Client
                             case 1:
                                 Console.WriteLine("Proceeding to Edit Menu");
                                 CurrentCustomPizza = currentUser.Orders[currentUser.Orders.Count - 1].Pizzas[currentEditRemoveIndex];
+                                CurrentCustomPizzaOld = new PizzaStore.Domain.Models.Pizza(CurrentCustomPizza);
+                                editingPizza = true;
                                 menu.currentMenu = 7;
                                 //set "edit pizza" to whatever selected pizza is
                                 break;
@@ -364,7 +368,7 @@ namespace PizzaStore.Client
                              "Cheese",
                                     new List<Domain.Models.Topping>(){
                                         new Domain.Models.Topping("Marinara Sauce",0),
-                                        new Domain.Models.Topping("Cheese",0)
+                                        new Domain.Models.Topping("Regular Cheese",0)
                                         },
                                         new Domain.Models.Crust("Plain", 0),
                                         new Domain.Models.Size("Large", 4),
@@ -404,13 +408,23 @@ namespace PizzaStore.Client
 
                             case 6:
                                 System.Console.WriteLine("Pizza Added to Order");
-                                currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(CurrentCustomPizza);
+                                if (!editingPizza)
+                                {
+                                    currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(CurrentCustomPizza);
+                                }
+                                editingPizza = false;
                                 CurrentCustomPizza = null;
                                 menu.currentMenu = 4;
                                 break;
 
                             case 7:
                                 System.Console.WriteLine("Proceeding to Main Menu...");
+                                if (editingPizza)
+                                {
+                                    currentUser.Orders[currentUser.Orders.Count - 1].Pizzas[currentEditRemoveIndex] = CurrentCustomPizzaOld;
+                                }
+
+                                editingPizza = false;
                                 menu.currentMenu = 4;
                                 break;
 
@@ -435,10 +449,44 @@ namespace PizzaStore.Client
                                 Console.WriteLine("Placing Order...");
                                 var order = new CustomerOrder { TotalPrice = (decimal)currentUser.Orders[currentUser.Orders.Count - 1].GetTotalPrice(), OrderedFrom = currentUser.ChosenStore.Name.IdName, DateModified = DateTime.Now, Active = true };
                                 var customerOrder = db.Set<CustomerOrder>();
-                                customerOrder.Add(order);
+                                customerOrder.Add(order);//add order to customerorder table
                                 var customerOrderCustomerFK = new FkCustomerOrderCustomer { CustomerOrderId = order.CustomerOrderId, CustomerId = 1, Active = true };
                                 var customerOrderCustomer = db.Set<FkCustomerOrderCustomer>();
-                                customerOrderCustomer.Add(customerOrderCustomerFK);
+                                customerOrderCustomer.Add(customerOrderCustomerFK);// add order and username to CustomerOrderCustomer table (to link customers and orders)
+
+
+                                foreach (var pizza in currentUser.Orders[currentUser.Orders.Count - 1].Pizzas)// links the pizza to the order
+                                {
+                                    string str = pizza.Size + " " + pizza.Crust;
+                                    int id = -1;
+                                    foreach (var p in db.Pizza)
+                                    {
+                                        if (str == p.Name)
+                                        {
+                                            id = p.PizzaId;
+                                            System.Console.WriteLine(str);
+                                        }
+                                    }
+
+                                    db.FkCustomerOrderPizza.Add(new FkCustomerOrderPizza { PizzaId = id, CustomerOrderId = customerOrderCustomerFK.CustomerId });
+
+                                    /**  foreach (var top in pizza.Toppings)//links the pizza to the toppings
+                                      {
+                                          int topId=-1;
+                                          foreach (var t in db.Topping)
+                                          {
+                                              if(t.Name==top.TopName)
+                                              {
+                                                  topId=t.ToppingId;
+                                              }
+                                          }
+
+                                          db.FkPizzaToppingId.Add(new FkPizzaToppingId{ToppingId=topId, PizzaId=id});
+                                      }
+                                      **/
+                                }
+
+
                                 db.SaveChanges();
                                 menu.currentMenu = 9;
                                 break;
@@ -494,7 +542,7 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 Console.WriteLine("Displaying Orders");
-                                CheckOrders(db);
+                                System.Console.WriteLine(CheckOrders(db));
                                 break;
 
                             case 2:
@@ -554,7 +602,6 @@ namespace PizzaStore.Client
                         }
                     }
                 }
-
                 while (menu.currentMenu == 14)//edit pizza Crust menu
                 {
                     menu.DisplayEditPizzaCrusteMenu();
@@ -564,22 +611,22 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 System.Console.WriteLine("Crust set to Plain");
-                                CurrentCustomPizza.Size.SizeName = "Plain";
-                                CurrentCustomPizza.Size.Price = 0;
+                                CurrentCustomPizza.Crust.CrustName = "Plain";
+                                CurrentCustomPizza.Crust.Price = 0;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 2:
                                 System.Console.WriteLine("Crust set to Deep Dish");
-                                CurrentCustomPizza.Size.SizeName = "Deep Dish";
-                                CurrentCustomPizza.Size.Price = 1;
+                                CurrentCustomPizza.Crust.CrustName = "Deep Dish";
+                                CurrentCustomPizza.Crust.Price = 1;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 3:
                                 System.Console.WriteLine("Crust set to Stuffed");
-                                CurrentCustomPizza.Size.SizeName = "Stuffed";
-                                CurrentCustomPizza.Size.Price = 2;
+                                CurrentCustomPizza.Crust.CrustName = "Stuffed";
+                                CurrentCustomPizza.Crust.Price = 2;
                                 menu.currentMenu = 7;
                                 break;
 
@@ -604,22 +651,22 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 System.Console.WriteLine("Sauce set to Marinara");
-                                CurrentCustomPizza.Size.SizeName = "Marinara";
-                                CurrentCustomPizza.Size.Price = 0;
+                                CurrentCustomPizza.Toppings[0].TopName = "Marinara";
+                                CurrentCustomPizza.Toppings[0].Price = 0;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 2:
                                 System.Console.WriteLine("Sauce set to Alfredo");
-                                CurrentCustomPizza.Size.SizeName = "Alfredo";
-                                CurrentCustomPizza.Size.Price = .5;
+                                CurrentCustomPizza.Toppings[0].TopName = "Alfredo";
+                                CurrentCustomPizza.Toppings[0].Price = .5;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 3:
                                 System.Console.WriteLine("Sauce set to Ranch");
-                                CurrentCustomPizza.Size.SizeName = "Ranch";
-                                CurrentCustomPizza.Size.Price = .5;
+                                CurrentCustomPizza.Toppings[0].TopName = "Ranch";
+                                CurrentCustomPizza.Toppings[0].Price = .5;
                                 menu.currentMenu = 7;
                                 break;
 
@@ -644,22 +691,22 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 System.Console.WriteLine("Cheese set to None");
-                                CurrentCustomPizza.Size.SizeName = "None";
-                                CurrentCustomPizza.Size.Price = 0;
+                                CurrentCustomPizza.Toppings[1].TopName = "No Cheese";
+                                CurrentCustomPizza.Toppings[1].Price = 0;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 2:
                                 System.Console.WriteLine("Cheese set to Regular");
-                                CurrentCustomPizza.Size.SizeName = "Regular";
-                                CurrentCustomPizza.Size.Price = 0;
+                                CurrentCustomPizza.Toppings[1].TopName = "Regular Cheese";
+                                CurrentCustomPizza.Toppings[1].Price = 0;
                                 menu.currentMenu = 7;
                                 break;
 
                             case 3:
                                 System.Console.WriteLine("Cheese set to Extra");
-                                CurrentCustomPizza.Size.SizeName = "Extra";
-                                CurrentCustomPizza.Size.Price = .75;
+                                CurrentCustomPizza.Toppings[1].TopName = "Extra Cheese";
+                                CurrentCustomPizza.Toppings[1].Price = .75;
                                 menu.currentMenu = 7;
                                 break;
 
@@ -677,33 +724,82 @@ namespace PizzaStore.Client
                 }
                 while (menu.currentMenu == 17)//edit pizza Toppings menu
                 {
-                    menu.DisplayEditPizzaSizeMenu();
+                    menu.DisplayEditPizzaToppingsMenu(CurrentCustomPizza);
                     if (int.TryParse(Console.ReadLine(), out input))//if input passes as good input, then perform selected operation
                     {
                         switch (input)
                         {
                             case 1:
-                                System.Console.WriteLine("Size set to Small");
-                                CurrentCustomPizza.Size.SizeName = "Small";
-                                CurrentCustomPizza.Size.Price = 0;
-                                menu.currentMenu = 7;
+                                string addRemove = (CurrentCustomPizza.CheckHasTopping("Pepperoni")) ? "Remove" : "Add";
+                                System.Console.WriteLine($"Pepperoni {addRemove}ed");
+                                if (addRemove == "Add")
+                                {
+
+                                    CurrentCustomPizza.AddTopping(new Domain.Models.Topping() { TopName = "Pepperoni", Price = 1 });
+                                }
+                                else
+                                {
+                                    CurrentCustomPizza.RemoveTopping("Pepperoni");
+                                }
                                 break;
 
                             case 2:
-                                System.Console.WriteLine("Size set to Medium");
-                                CurrentCustomPizza.Size.SizeName = "Medium";
-                                CurrentCustomPizza.Size.Price = 2;
-                                menu.currentMenu = 7;
+                                addRemove = (CurrentCustomPizza.CheckHasTopping("Ham")) ? "Remove" : "Add";
+                                System.Console.WriteLine($"Ham {addRemove}ed");
+                                if (addRemove == "Add")
+                                {
+
+                                    CurrentCustomPizza.AddTopping(new Domain.Models.Topping() { TopName = "Ham", Price = 1.25 });
+                                }
+                                else
+                                {
+                                    CurrentCustomPizza.RemoveTopping("Ham");
+                                }
                                 break;
 
                             case 3:
-                                System.Console.WriteLine("Size set to Large");
-                                CurrentCustomPizza.Size.SizeName = "Large";
-                                CurrentCustomPizza.Size.Price = 4;
-                                menu.currentMenu = 7;
+                                addRemove = (CurrentCustomPizza.CheckHasTopping("Chicken")) ? "Remove" : "Add";
+                                System.Console.WriteLine($"Chicken {addRemove}ed");
+                                if (addRemove == "Add")
+                                {
+
+                                    CurrentCustomPizza.AddTopping(new Domain.Models.Topping() { TopName = "Chicken", Price = 2 });
+                                }
+                                else
+                                {
+                                    CurrentCustomPizza.RemoveTopping("Chicken");
+                                }
                                 break;
 
                             case 4:
+                                addRemove = (CurrentCustomPizza.CheckHasTopping("Pineapple")) ? "Remove" : "Add";
+                                System.Console.WriteLine($"Pineapple {addRemove}ed");
+                                if (addRemove == "Add")
+                                {
+
+                                    CurrentCustomPizza.AddTopping(new Domain.Models.Topping() { TopName = "Pineapple", Price = .75 });
+                                }
+                                else
+                                {
+                                    CurrentCustomPizza.RemoveTopping("Pineapple");
+                                }
+                                break;
+
+                            case 5:
+                                addRemove = (CurrentCustomPizza.CheckHasTopping("Buffalo Hot Sauce")) ? "Remove" : "Add";
+                                System.Console.WriteLine($"Buffalo Hot Sauce {addRemove}ed");
+                                if (addRemove == "Add")
+                                {
+
+                                    CurrentCustomPizza.AddTopping(new Domain.Models.Topping() { TopName = "Buffalo Hot Sauce", Price = .25 });
+                                }
+                                else
+                                {
+                                    CurrentCustomPizza.RemoveTopping("Buffalo Hot Sauce");
+                                }
+                                break;
+
+                            case 6:
                                 System.Console.WriteLine("Returning to Customize Menu...");
                                 menu.currentMenu = 7;
                                 break;
@@ -724,11 +820,49 @@ namespace PizzaStore.Client
         static string CheckOrders(PizzaStoreDbContext db)
         {
             var sb = new System.Text.StringBuilder();
+            //take the order id to search through the list of customerordercustomers to find its matching id. 
+            //Then get the customerid off of that and search throught the customers
+
 
             foreach (var order in db.CustomerOrder.ToList())
             {
+                foreach (var fkcoc in db.FkCustomerOrderCustomer.ToList())//getting name
+                {
+                    if (order.CustomerOrderId == fkcoc.CustomerOrderId)
+                    {
+                        foreach (var customer in db.Customer.ToList())
+                        {
+                            if (fkcoc.CustomerId == customer.CustomerId)
+                            {
 
-                sb.Append($"$: {order}\n");
+                                foreach (var name in db.Name.ToList())
+                                {
+                                    if (name.NameId == customer.NameId)
+                                    {
+                                        sb.Append(name.NameText + ": .... ");
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+                sb.Append($"${order.TotalPrice}\n");//getting total price
+                //getting pizzas ordered
+                foreach (var orderPizza in db.FkCustomerOrderPizza.ToList())
+                {
+                    if (order.CustomerOrderId == orderPizza.CustomerOrderId)
+                    {
+                        foreach (var pizza in db.Pizza.ToList())
+                        {
+                            if (pizza.PizzaId == orderPizza.PizzaId)
+                            {
+                                sb.Append($"{pizza.Name} \n");
+                                //need to find toppings
+                            }
+                        }
+                    }
+                }
             }
             return sb.ToString();
         }

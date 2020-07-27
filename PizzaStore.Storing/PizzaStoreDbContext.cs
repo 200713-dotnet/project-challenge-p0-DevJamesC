@@ -19,6 +19,7 @@ namespace PizzaStore.Storing
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerOrder> CustomerOrder { get; set; }
         public virtual DbSet<FkCustomerOrderCustomer> FkCustomerOrderCustomer { get; set; }
+        public virtual DbSet<FkCustomerOrderPizza> FkCustomerOrderPizza { get; set; }
         public virtual DbSet<FkPizzaToppingId> FkPizzaToppingId { get; set; }
         public virtual DbSet<Name> Name { get; set; }
         public virtual DbSet<Pizza> Pizza { get; set; }
@@ -114,6 +115,28 @@ namespace PizzaStore.Storing
                     .HasForeignKey(d => d.CustomerOrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("PK_CustomerOrderCustomer_CustomerOrder");
+            });
+
+            modelBuilder.Entity<FkCustomerOrderPizza>(entity =>
+            {
+                entity.HasKey(e => e.CustomerOrderPizzaId)
+                    .HasName("PK_CustomerOrderPizzaId");
+
+                entity.ToTable("FK_CustomerOrder_Pizza", "Agent");
+
+                entity.Property(e => e.CustomerOrderPizzaId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.CustomerOrder)
+                    .WithMany(p => p.FkCustomerOrderPizza)
+                    .HasForeignKey(d => d.CustomerOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PK_CustomerOrderPizzaId_CustomerOrder");
+
+                entity.HasOne(d => d.Pizza)
+                    .WithMany(p => p.FkCustomerOrderPizza)
+                    .HasForeignKey(d => d.PizzaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PK_CustomerOrderPizzaId_Pizza");
             });
 
             modelBuilder.Entity<FkPizzaToppingId>(entity =>

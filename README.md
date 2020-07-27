@@ -67,11 +67,11 @@ as a user, i should be able to do this:
 + see a list of locations [CHECK]
 + select a location [CHECK]
 + place an order [CHECK]
-+ with either custom or preset pizzas
++ with either custom or preset pizzas [CHECK]
 + if custom
-+ select crust, size and toppings
++ select crust, size and toppings [CHECK]
 + if preset
-+ select pizza and its size
++ select pizza and its size [CHECK]
 + see a tally of my order [CHECK]
 + add or remove more pizzas [Check]
 + and checkout when complete with latest order [CHECK]
