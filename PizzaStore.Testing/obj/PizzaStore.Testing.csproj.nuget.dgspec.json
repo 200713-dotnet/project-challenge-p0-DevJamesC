@@ -1,29 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Testing/PizzaStore.Testing.csproj": {}
+    "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Testing/PizzaStore.Testing.csproj": {}
   },
   "projects": {
-    "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Testing/PizzaStore.Testing.csproj": {
+    "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Testing/PizzaStore.Testing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Testing/PizzaStore.Testing.csproj",
+        "projectUniqueName": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Testing/PizzaStore.Testing.csproj",
         "projectName": "PizzaStore.Testing",
-        "projectPath": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Testing/PizzaStore.Testing.csproj",
+        "projectPath": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Testing/PizzaStore.Testing.csproj",
         "packagesPath": "/home/jkc36/.nuget/packages/",
-        "outputPath": "/home/jkc36/revature/week2/PizzaStore/PizzaStore.Testing/obj/",
+        "outputPath": "/home/jkc36/revature/projects/project-challenge-p0-DevJamesC/PizzaStore.Testing/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jkc36/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "netstandard2.0"
+          "netcoreapp3.1"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netstandard2.0": {
+          "netcoreapp3.1": {
             "projectReferences": {}
           }
         },
@@ -34,13 +34,23 @@
         }
       },
       "frameworks": {
-        "netstandard2.0": {
+        "netcoreapp3.1": {
           "dependencies": {
-            "NETStandard.Library": {
-              "suppressParent": "All",
+            "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[2.0.3, )",
-              "autoReferenced": true
+              "version": "[16.5.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.0, )"
             }
           },
           "imports": [
@@ -53,6 +63,11 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
         }
       }

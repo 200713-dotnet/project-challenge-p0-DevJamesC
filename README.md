@@ -2,7 +2,7 @@
 
 The goal of the project is to build a Pizza Ordering System. 
 
-## architecture (REQUIRED)
+## architecture (REQUIRED) [CHECK]
 
 + [solution] PizzaBox.sln
   + [project - console] PizzaBox.Client.csproj
@@ -38,7 +38,7 @@ The project should support objects of User, Store, Order, Pizza.
 + [required] each pizza must be able to have a size [CHECK]
 + [required] each pizza must be able to have toppings [CHECK]
 + [required] each pizza must be able to compute its pricing [CHECK]
-+ [required] each pizza must have no less than 2 default toppings
++ [required] each pizza must have no less than 2 default toppings [Check--Not-Enforced-By-Code]
 + [required] each pizza must limit its toppings to no more 5 [CHECK--NOT-DISPLAYED-TO-USERS]
 
 ### user

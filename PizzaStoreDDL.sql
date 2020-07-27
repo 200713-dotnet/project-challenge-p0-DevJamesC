@@ -6,6 +6,9 @@ go
 create database PizzaStoreDb;
 go
 
+use PizzaStoreDb;
+go
+
 create schema Pizza; 
 go
 
@@ -122,3 +125,18 @@ create table Agent.FK_CustomerOrder_Customer
     CONSTRAINT PK_CustomerOrderCustomer_CustomerOrder foreign key(CustomerOrderId) references Agent.CustomerOrder(CustomerOrderId),
     Constraint PK_CustomerOrderCustomer_Customer foreign key(CustomerId) references Agent.Customer(CustomerId)
 );
+
+--DESTROY
+drop table Pizza.FK_Pizza_ToppingId;
+drop table Pizza.Pizza;
+drop table Pizza.Topping;
+drop table Pizza.Crust;
+drop table Pizza.Size;
+drop table Agent.FK_CustomerOrder_Customer;
+drop table Agent.Customer;
+drop table Agent.Shop;
+drop table Agent.CustomerOrder;
+drop table Agent.Name;
+drop SCHEMA Pizza;
+Drop SCHEMA Agent;
+Drop DATABASE PizzaStoreDb;
