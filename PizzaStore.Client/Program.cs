@@ -1,24 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PizzaStore.Domain.Models;
+using PizzaStore.Storing;
+
 
 namespace PizzaStore.Client
 {
-    //  menu index: Exit=-1 EntryMenu=0 Login=1 Register=2 SelectLocation=3 Main=4 SelectEdititem=5 EditRemoveItem=6 CustomPizzaBuilder=7 Checkout=8 UserProfileSettings=9 ShopMain=10
-    class Program
+    //  menu index: Exit=-1 EntryMenu=0 Login=1 Register=2 SelectLocation=3 Main=4 SelectEdititem=5 EditRemoveItem=6 
+    //   CustomPizzaBuilder=7 Checkout=8 OrderPlaced=9 UserProfileSettings=10 ShopMain=11
+    public class Program
     {
         static void Main(string[] args)
         {
             RunApplication();
         }
 
-        static void RunApplication()
+        public static void RunApplication()
         {
             MenuManager menu = new MenuManager();
             bool terminateProgram = false;
             User currentUser = null;
             int currentEditRemoveIndex = 0;
-            Pizza CurrentCustomPizza = null;
+            Domain.Models.Pizza CurrentCustomPizza = null;
+            var db = new PizzaStoreDbContext();
             do
             {
                 int input = 0;
@@ -155,7 +160,11 @@ namespace PizzaStore.Client
                                 {
                                     currentUser.ChosenStore = new Store("Dev's Pizza - Downtown", "Store1");
                                     menu.currentMenu = 4;
-                                }//if shop, go to ShopMainMenu instead
+                                }
+                                else
+                                {//if shop, go to ShopMainMenu instead
+                                    menu.currentMenu = 10;
+                                }
                                 break;
 
                             case 2:
@@ -164,7 +173,11 @@ namespace PizzaStore.Client
                                 {
                                     currentUser.ChosenStore = new Store("Dev's Pizza - Westside", "Store2");
                                     menu.currentMenu = 4;
-                                }//if shop, go to ShopMainMenu instead
+                                }
+                                else
+                                {//if shop, go to ShopMainMenu instead
+                                    menu.currentMenu = 10;
+                                }
                                 break;
 
                             case 3:
@@ -201,12 +214,12 @@ namespace PizzaStore.Client
                                 System.Console.WriteLine("Added Cheese Pizza");
                                 currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(
                                     "Cheese",
-                                    new List<Topping>(){
-                                        new Topping("Marinara Sauce",0),
-                                        new Topping("Cheese",0)
+                                    new List<Domain.Models.Topping>(){
+                                        new Domain.Models.Topping("Marinara Sauce",0),
+                                        new Domain.Models.Topping("Cheese",0)
                                         },
-                                        new Crust("Plain", 0),
-                                        new Size("Large", 4),
+                                        new Domain.Models.Crust("Plain", 0),
+                                        new Domain.Models.Size("Large", 4),
                                         6);
                                 break;
 
@@ -214,13 +227,13 @@ namespace PizzaStore.Client
                                 System.Console.WriteLine("Added Pepperoni Pizza");
                                 currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(
                                     "Pepperoni",
-                                   new List<Topping>(){
-                                        new Topping("Marinara Sauce",0),
-                                        new Topping("Cheese",0),
-                                        new Topping("Pepperoni",1)
+                                   new List<Domain.Models.Topping>(){
+                                        new Domain.Models.Topping("Marinara Sauce",0),
+                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Pepperoni",1)
                                        },
-                                       new Crust("Plain", 0),
-                                       new Size("Large", 4),
+                                       new Domain.Models.Crust("Plain", 0),
+                                       new Domain.Models.Size("Large", 4),
                                        6);
                                 break;
 
@@ -228,14 +241,14 @@ namespace PizzaStore.Client
                                 System.Console.WriteLine("Added Hawaiian Pizza");
                                 currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(
                                     "Hawaiian",
-                                 new List<Topping>(){
-                                        new Topping("Marinara Sauce",0),
-                                        new Topping("Cheese",0),
-                                        new Topping("Pineapples",.75),
-                                        new Topping("Ham",1.25)
+                                 new List<Domain.Models.Topping>(){
+                                        new Domain.Models.Topping("Marinara Sauce",0),
+                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Pineapples",.75),
+                                        new Domain.Models.Topping("Ham",1.25)
                                      },
-                                     new Crust("Plain", 0),
-                                     new Size("Large", 4),
+                                     new Domain.Models.Crust("Plain", 0),
+                                     new Domain.Models.Size("Large", 4),
                                      6);
                                 break;
 
@@ -243,14 +256,14 @@ namespace PizzaStore.Client
                                 System.Console.WriteLine("Added Buffalo Chicken Pizza");
                                 currentUser.Orders[currentUser.Orders.Count - 1].CreatePizza(
                                     "Buffalo Chicken",
-                                 new List<Topping>(){
-                                        new Topping("Marinara Sauce",0),
-                                        new Topping("Cheese",0),
-                                        new Topping("Chicken",2),
-                                        new Topping("Buffalo Hot Sauce",.25)
+                                 new List<Domain.Models.Topping>(){
+                                        new Domain.Models.Topping("Marinara Sauce",0),
+                                        new Domain.Models.Topping("Cheese",0),
+                                        new Domain.Models.Topping("Chicken",2),
+                                        new Domain.Models.Topping("Buffalo Hot Sauce",.25)
                                      },
-                                     new Crust("Plain", 0),
-                                     new Size("Large", 4),
+                                     new Domain.Models.Crust("Plain", 0),
+                                     new Domain.Models.Size("Large", 4),
                                      6);
                                 break;
 
@@ -266,6 +279,7 @@ namespace PizzaStore.Client
 
                             case 8:
                                 System.Console.WriteLine("Proceeding to Checkout...");
+                                menu.currentMenu = 8;
                                 break;
 
                             case 9:
@@ -341,18 +355,18 @@ namespace PizzaStore.Client
                     }
                 }
 
-                while (menu.currentMenu == 7)
+                while (menu.currentMenu == 7)//edit pizza menu
                 {
                     if (CurrentCustomPizza == null) //creates a new "large cheese" pizza if not editing a pizza
                     {
-                        CurrentCustomPizza = new Pizza(
+                        CurrentCustomPizza = new Domain.Models.Pizza(
                              "Cheese",
-                                    new List<Topping>(){
-                                        new Topping("Marinara Sauce",0),
-                                        new Topping("Cheese",0)
+                                    new List<Domain.Models.Topping>(){
+                                        new Domain.Models.Topping("Marinara Sauce",0),
+                                        new Domain.Models.Topping("Cheese",0)
                                         },
-                                        new Crust("Plain", 0),
-                                        new Size("Large", 4),
+                                        new Domain.Models.Crust("Plain", 0),
+                                        new Domain.Models.Size("Large", 4),
                                         6);
                     }
 
@@ -361,9 +375,114 @@ namespace PizzaStore.Client
 
                 }
 
+                //checkout menu
+                while (menu.currentMenu == 8)
+                {
+                    menu.DisplayCheckoutMenu(currentUser.Orders[currentUser.Orders.Count - 1]);
+
+                    if (int.TryParse(Console.ReadLine(), out input))
+                    {
+                        switch (input)
+                        {
+                            case 1:
+                                Console.WriteLine("Placing Order...");
+                                var order = new CustomerOrder { TotalPrice = (decimal)currentUser.Orders[currentUser.Orders.Count - 1].GetTotalPrice(), DateModified = DateTime.Now, Active = true };
+                                var customerOrder = db.Set<CustomerOrder>();
+                                customerOrder.Add(order);
+                                db.SaveChanges();
+                                menu.currentMenu = 9;
+                                break;
+
+                            case 2:
+                                Console.WriteLine("Returning to Main Menu...");
+                                menu.currentMenu = 4;
+                                break;
+
+                            default:
+                                Console.WriteLine("That is not an option");
+                                break;
+                        }
+                    }
+                }
+
+                //Order Placed Menu
+                while (menu.currentMenu == 9)
+                {
+                    menu.DisplayOrderConfirmedMenu(currentUser.Name);
+
+                    if (int.TryParse(Console.ReadLine(), out input))
+                    {
+                        switch (input)
+                        {
+                            case 1:
+                                Console.WriteLine("Starting Another order");
+                                currentUser.Orders.Add(new Order());
+                                menu.currentMenu = 4;
+                                break;
+
+                            case 2:
+                                Console.WriteLine("Logging out...");
+                                currentUser = null;
+                                menu.currentMenu = 0;
+                                break;
+
+                            default:
+                                Console.WriteLine("That is not an option");
+                                break;
+                        }
+                    }
+                }
+
+                //store main menu
+                while (menu.currentMenu == 10)
+                {
+                    menu.DisplayStoreMainMenu();
+
+                    if (int.TryParse(Console.ReadLine(), out input))
+                    {
+                        switch (input)
+                        {
+                            case 1:
+                                Console.WriteLine("Displaying Orders");
+                                CheckOrders(db);
+                                break;
+
+                            case 2:
+                                Console.WriteLine("Proceeding to Sales...");
+                                //menu.currentMenu = ;
+                                break;
+
+                            case 3:
+                                Console.WriteLine("Logging Out...");
+                                menu.currentMenu = 0;
+                                break;
+
+                            default:
+                                Console.WriteLine("That is not an option");
+                                break;
+                        }
+                    }
+                }
+
+
+
+
                 System.Console.WriteLine();
             } while (!terminateProgram);
         }
+
+        static string CheckOrders(PizzaStoreDbContext db)
+        {
+                    var sb=new System.Text.StringBuilder();
+                    
+            foreach (var order in db.CustomerOrder.ToList())
+            {
+                sb.Append($"$: {order}\n");
+            }
+            return sb.ToString();
+        }
+
+       
 
     }
 }

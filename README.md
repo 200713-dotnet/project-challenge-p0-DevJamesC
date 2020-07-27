@@ -50,8 +50,8 @@ The project should support objects of User, Store, Order, Pizza.
 ## technologies
 
 + .NET Core - C# [CHECK]
-+ .NET Core - EF + SQL
-+ .NET Core - xUnit
++ .NET Core - EF + SQL [CHECK]
++ .NET Core - xUnit [CHECK]
 
 ## timelines
 
@@ -66,24 +66,24 @@ as a user, i should be able to do this:
 + access the application [CHECK]
 + see a list of locations [CHECK]
 + select a location [CHECK]
-+ place an order
++ place an order [CHECK]
 + with either custom or preset pizzas
 + if custom
 + select crust, size and toppings
 + if preset
 + select pizza and its size
-+ see a tally of my order
-+ add or remove more pizzas
-+ and checkout when complete with latest order
++ see a tally of my order [CHECK]
++ add or remove more pizzas [Check]
++ and checkout when complete with latest order [CHECK]
 + see my order history
-+ make a new order
++ make a new order [CHECK]
 
 ## store story
 
 as a store, i should be able do this:
 
 + access the application [CHECK]
-+ select options for order history, sales
++ select options for order history, sales [CHECK]
 + if order history
 + select options for all store orders and orders associated to a user (filtering)
 + if sales

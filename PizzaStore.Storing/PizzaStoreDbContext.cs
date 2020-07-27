@@ -52,8 +52,6 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -67,8 +65,6 @@ namespace PizzaStore.Storing
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
 
                 entity.HasOne(d => d.Name)
                     .WithMany(p => p.Customer)
@@ -89,7 +85,9 @@ namespace PizzaStore.Storing
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
 
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("totalPrice")
+                    .HasColumnType("money");
             });
 
             modelBuilder.Entity<FkCustomerOrderCustomer>(entity =>
@@ -147,8 +145,6 @@ namespace PizzaStore.Storing
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
             });
 
             modelBuilder.Entity<Pizza>(entity =>
@@ -166,8 +162,6 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
 
                 entity.HasOne(d => d.Crust)
                     .WithMany(p => p.Pizza)
@@ -192,8 +186,6 @@ namespace PizzaStore.Storing
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
 
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
-
                 entity.HasOne(d => d.Name)
                     .WithMany(p => p.Shop)
                     .HasForeignKey(d => d.NameId)
@@ -212,8 +204,6 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
             });
 
             modelBuilder.Entity<Topping>(entity =>
@@ -227,8 +217,6 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
-
-                entity.Property(e => e.UserModified).HasColumnType("datetime2(0)");
             });
 
             OnModelCreatingPartial(modelBuilder);

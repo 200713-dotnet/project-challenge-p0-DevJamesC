@@ -13,7 +13,6 @@ namespace PizzaStore.Storing
         public int CustomerId { get; set; }
         public int NameId { get; set; }
         public DateTime DateModified { get; set; }
-        public DateTime UserModified { get; set; }
         public bool? Active { get; set; }
 
         public virtual Name Name { get; set; }

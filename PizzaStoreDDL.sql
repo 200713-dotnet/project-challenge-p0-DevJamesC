@@ -23,7 +23,6 @@ create table Pizza.Crust
     CrustId int not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_CrustId primary key (CrustId)
 );
@@ -33,7 +32,6 @@ create table Pizza.Size
     SizeId int not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null,
     constraint PK_SizeId primary key (SizeId)
 );
@@ -45,7 +43,6 @@ create table Pizza.Pizza
     SizeId int null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_PizzaId primary key (PizzaId),
     constraint FK_CrustId foreign key(CrustId) references Pizza.Crust(CrustId),
@@ -57,7 +54,6 @@ create table Pizza.Topping
     ToppingId int not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null,
     constraint PK_ToppingID primary key (ToppingId)
 );
@@ -77,7 +73,6 @@ create table Agent.Name
 (
     NameId int not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_NameId primary key (NameId)
 );
@@ -87,7 +82,6 @@ create table Agent.Customer
     CustomerId int not null,
      NameId int not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_CustomerId primary key (CustomerId),
     constraint FK_Customer_NameId foreign key(NameId) references Agent.Name(NameId)
@@ -98,7 +92,6 @@ create table Agent.Shop
     ShopId int not null,
      NameId int not null,
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_ShopId primary key (ShopId),
     constraint FK_Shop_NameId foreign key(NameId) references Agent.Name(NameId)
@@ -109,8 +102,9 @@ create table Agent.Shop
 create table Agent.CustomerOrder
 (
     CustomerOrderId int not null,
+    totalPrice money not null,
+    OrderedFrom nvarchar(250) not null, --NOT YET IMPLIMENTED
     DateModified datetime2(0) not null,
-    UserModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_CustomerOrderId primary key (CustomerOrderId)
 );
@@ -140,3 +134,10 @@ drop table Agent.Name;
 drop SCHEMA Pizza;
 Drop SCHEMA Agent;
 Drop DATABASE PizzaStoreDb;
+
+--Queries
+
+Select * From Agent.CustomerOrder;
+
+--INSERT into Agent.Customer (CustomerId)
+--values ()

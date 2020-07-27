@@ -3,7 +3,7 @@ using PizzaStore.Domain.Models;
 
 namespace PizzaStore.Client
 {
-    class MenuManager
+    public class MenuManager
     {
         public int currentMenu;
 
@@ -20,6 +20,16 @@ namespace PizzaStore.Client
             System.Console.WriteLine("1: Login");
             System.Console.WriteLine("2: Register");
             System.Console.WriteLine("3: [ADMIN] TERMINATE PROGRAM");
+        }
+
+         public string DisplayEntryTextT()
+        {
+            System.Console.WriteLine("Welcome to Dev's Pizza App");
+            System.Console.WriteLine("Please choose Login, or Register now!");
+            System.Console.WriteLine("1: Login");
+            System.Console.WriteLine("2: Register");
+            System.Console.WriteLine("3: [ADMIN] TERMINATE PROGRAM");
+            return "true";
         }
 
         public void DisplayLoginMenu()
@@ -97,13 +107,35 @@ namespace PizzaStore.Client
         public void DisplayCustomizePizzaMenu(Pizza pizza)
         {
             System.Console.WriteLine($"{pizza.ToString()}");
-             System.Console.WriteLine("1: Edit Size");
+            System.Console.WriteLine("1: Edit Size");
             System.Console.WriteLine("2: Edit Crust");
             System.Console.WriteLine("3: Edit Sauce");
             System.Console.WriteLine("4: Edit Cheese");
             System.Console.WriteLine("5: Edit Toppings");
             System.Console.WriteLine("6: Add to Order");
             System.Console.WriteLine("7: Cancel and Return to Menu");
+        }
+
+        public void DisplayCheckoutMenu(Order order)
+        {
+            System.Console.WriteLine($"Your order is \n{order.ToString()}");
+            System.Console.WriteLine("1: Place Order");
+            System.Console.WriteLine("2: Return to Main Menu");
+        }
+
+        public void DisplayOrderConfirmedMenu(Name username)
+        {
+            System.Console.WriteLine($"Order confirmed for {username.IdName}");
+            System.Console.WriteLine("1: Start another Order");
+            System.Console.WriteLine("2: Logout");
+        }
+
+        public void DisplayStoreMainMenu()
+        {
+             System.Console.WriteLine("MAIN MENU");
+             System.Console.WriteLine("1: Display Orders");
+             System.Console.WriteLine("2: Display Sales");
+             System.Console.WriteLine("3: Logout");
         }
 
     }
