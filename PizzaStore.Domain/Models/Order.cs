@@ -33,6 +33,11 @@ namespace PizzaStore.Domain.Models
             }
         }
 
+        public void CreatePizza(Pizza pizza)
+        {
+            Pizzas.Add(pizza);
+        }
+
         public void RemovePizza(int input)
         {
             Pizzas.RemoveAt(input);

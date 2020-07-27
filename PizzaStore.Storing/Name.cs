@@ -12,6 +12,7 @@ namespace PizzaStore.Storing
         }
 
         public int NameId { get; set; }
+        public string NameText { get; set; }
         public DateTime DateModified { get; set; }
         public bool? Active { get; set; }
 

@@ -85,6 +85,10 @@ namespace PizzaStore.Storing
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
 
+                entity.Property(e => e.OrderedFrom)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
                 entity.Property(e => e.TotalPrice)
                     .HasColumnName("totalPrice")
                     .HasColumnType("money");
@@ -145,6 +149,8 @@ namespace PizzaStore.Storing
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
+
+                entity.Property(e => e.NameText).HasMaxLength(250);
             });
 
             modelBuilder.Entity<Pizza>(entity =>

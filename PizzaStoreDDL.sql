@@ -72,6 +72,7 @@ create table Pizza.FK_Pizza_ToppingId
 create table Agent.Name
 (
     NameId int not null,
+    NameText nvarchar(250),
     DateModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_NameId primary key (NameId)
@@ -103,7 +104,7 @@ create table Agent.CustomerOrder
 (
     CustomerOrderId int not null,
     totalPrice money not null,
-    OrderedFrom nvarchar(250) not null, --NOT YET IMPLIMENTED
+    OrderedFrom nvarchar(250) not null, 
     DateModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_CustomerOrderId primary key (CustomerOrderId)
@@ -138,6 +139,18 @@ Drop DATABASE PizzaStoreDb;
 --Queries
 
 Select * From Agent.CustomerOrder;
+Select * From Agent.Customer;
+select * From Agent.Name;
 
---INSERT into Agent.Customer (CustomerId)
---values ()
+INSERT into Agent.NAME(NameId,NameText,DateModified,Active)
+values(1,'User','20120618 10:34:09 AM',1);
+
+INSERT into Agent.NAME(NameId,NameText,DateModified,Active)
+values(2,'Shop','20120618 10:34:09 AM',1);
+
+INSERT into Agent.Customer (CustomerId, NameId,DateModified,Active)
+values (1,1,'20120618 10:34:09 AM',1);
+
+Insert into Agent.Shop (ShopId,NameId,DateModified,Active)
+values (1,2,'20120618 10:34:09 AM',1);
+

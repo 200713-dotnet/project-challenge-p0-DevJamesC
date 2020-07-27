@@ -138,5 +138,50 @@ namespace PizzaStore.Client
              System.Console.WriteLine("3: Logout");
         }
 
+        public void DisplayEditPizzaSizeMenu()
+        {
+             System.Console.WriteLine("CUSTOM PIZZA: EDIT SIZE");
+             System.Console.WriteLine("1: Small");
+             System.Console.WriteLine("2: Medium");
+             System.Console.WriteLine("3: Large");
+             System.Console.WriteLine("4: Return To Customize Menu");
+        }
+
+        public void DisplayEditPizzaCrusteMenu()
+        {
+             System.Console.WriteLine("CUSTOM PIZZA: EDIT CRUST");
+             System.Console.WriteLine("1: Plain");
+             System.Console.WriteLine("2: Deep Dish");
+             System.Console.WriteLine("3: Stuffed");
+             System.Console.WriteLine("4: Return To Customize Menu");
+        }
+
+        public void DisplayEditPizzaSauceeMenu()
+        {
+             System.Console.WriteLine("CUSTOM PIZZA: EDIT SAUCE");
+             System.Console.WriteLine("1: Marinara");
+             System.Console.WriteLine("2: Alfredo");
+             System.Console.WriteLine("3: Ranch");
+             System.Console.WriteLine("4: Return To Customize Menu");
+        }
+        public void DisplayEditPizzaCheeseMenu()
+        {
+             System.Console.WriteLine("CUSTOM PIZZA: EDIT CHEESE");
+             System.Console.WriteLine("1: No Cheese");
+             System.Console.WriteLine("2: Regular Cheese");
+             System.Console.WriteLine("3: Extra Cheese");
+             System.Console.WriteLine("4: Return To Customize Menu");
+        }
+
+        public void DisplayEditPizzaToppingsMenu()
+        {
+             System.Console.WriteLine("CUSTOM PIZZA: EDIT TOPPINGS");
+             //list toppings currently on pizza and select add or remove/edit
+             System.Console.WriteLine("1: Small");
+             System.Console.WriteLine("2: Medium");
+             System.Console.WriteLine("3: Large");
+             System.Console.WriteLine("4: Return To Customize Menu");
+        }
+
     }
 }

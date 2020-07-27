@@ -12,8 +12,10 @@ namespace PizzaStore.Storing
 
         public int CustomerOrderId { get; set; }
         public decimal TotalPrice { get; set; }
+        public string OrderedFrom { get; set; }
         public DateTime DateModified { get; set; }
         public bool? Active { get; set; }
+
         public virtual ICollection<FkCustomerOrderCustomer> FkCustomerOrderCustomer { get; set; }
     }
 }
