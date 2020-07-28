@@ -73,6 +73,7 @@ namespace PizzaStore.Storing.Repositories
         {
             var sb = new StringBuilder();
 
+            /**  //works, but should not be used. The LINQ equivilent is below
             foreach (var order in _db.CustomerOrder.ToList())
             {
                 foreach (var orderUserFK in _db.FkCustomerOrderCustomer.ToList())
@@ -110,6 +111,63 @@ namespace PizzaStore.Storing.Repositories
                         }
                     }
                 }
+            }**/
+
+            var query = from o in _db.CustomerOrder
+                        join co in _db.FkCustomerOrderCustomer on o.CustomerOrderId equals co.CustomerOrderId  //link orders and orderUsers
+                        join c in _db.Customer on co.CustomerId equals c.CustomerId //link orderUsers and users
+                        join n in _db.Name on c.NameId equals n.NameId //link users and names
+                        select new
+                        {
+                            orderID = o.CustomerOrderId,
+                            Username = n.NameText,
+                            TotalPrice = o.TotalPrice,
+                            OrderedFrom = o.OrderedFrom
+                        };
+
+            foreach (var item in query.ToList())
+            {
+                sb.Append($"User: {item.Username}, From: {item.OrderedFrom}, Total: ${Math.Truncate(item.TotalPrice * 100) / 100} \n");
+
+                var pizzas = from o in _db.CustomerOrder
+                             join po in _db.FkCustomerOrderPizza on o.CustomerOrderId equals po.CustomerOrderId //link orders and orderPizza
+                             join p in _db.Pizza on po.PizzaId equals p.PizzaId
+                             where o.CustomerOrderId == item.orderID
+                             select new
+                             {
+                                 PizzaId = p.PizzaId,
+                                 Name = p.Name
+                             };
+
+                foreach (var pizza in pizzas.ToList())
+                {
+                    var sb2 = new StringBuilder();
+
+                    var tops = from p in _db.Pizza
+                               join tp in _db.FkPizzaToppingId on p.PizzaId equals tp.PizzaId
+                               join t in _db.Topping on tp.ToppingId equals t.ToppingId
+                               where p.PizzaId == pizza.PizzaId
+                               select new
+                               {
+                                   Name = t.Name
+                               };//Entity framework is an ORM
+                    int i = 0;
+                    foreach (var top in tops.ToList())
+                    {
+                        sb2.Append($"{top.Name},");
+                        i += 1;
+                    } //There is an issue displaying or adding the toppings, therefore we are not going to attempt to dispay them
+
+                   // if (i > 0)
+                   // {
+                   //     sb.Append($"           Pizza: {pizza.Name} with {sb2.ToString()} \n");
+                   // }
+                   // else
+                   // {
+                        sb.Append($"           Pizza: {pizza.Name} \n");
+                   // }
+                }
+
             }
 
             return sb.ToString();
