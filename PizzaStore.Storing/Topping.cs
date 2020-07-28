@@ -11,6 +11,7 @@ namespace PizzaStore.Storing
         }
 
         public int ToppingId { get; set; }
+        public decimal Price { get; set; }
         public string Name { get; set; }
         public DateTime DateModified { get; set; }
         public bool Active { get; set; }

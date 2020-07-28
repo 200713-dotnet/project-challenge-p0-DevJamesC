@@ -42,8 +42,6 @@ namespace PizzaStore.Storing
             {
                 entity.ToTable("Crust", "Pizza");
 
-                entity.Property(e => e.CrustId).ValueGeneratedNever();
-
                 entity.Property(e => e.Active)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
@@ -53,13 +51,13 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.Price).HasColumnType("money");
             });
 
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.ToTable("Customer", "Agent");
-
-                entity.Property(e => e.CustomerId).ValueGeneratedNever();
 
                 entity.Property(e => e.Active)
                     .IsRequired()
@@ -77,8 +75,6 @@ namespace PizzaStore.Storing
             modelBuilder.Entity<CustomerOrder>(entity =>
             {
                 entity.ToTable("CustomerOrder", "Agent");
-
-                entity.Property(e => e.CustomerOrderId).ValueGeneratedNever();
 
                 entity.Property(e => e.Active)
                     .IsRequired()
@@ -102,8 +98,6 @@ namespace PizzaStore.Storing
 
                 entity.ToTable("FK_CustomerOrder_Customer", "Agent");
 
-                entity.Property(e => e.CustomerOrderCustomerId).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.FkCustomerOrderCustomer)
                     .HasForeignKey(d => d.CustomerId)
@@ -123,8 +117,6 @@ namespace PizzaStore.Storing
                     .HasName("PK_CustomerOrderPizzaId");
 
                 entity.ToTable("FK_CustomerOrder_Pizza", "Agent");
-
-                entity.Property(e => e.CustomerOrderPizzaId).ValueGeneratedNever();
 
                 entity.HasOne(d => d.CustomerOrder)
                     .WithMany(p => p.FkCustomerOrderPizza)
@@ -146,8 +138,6 @@ namespace PizzaStore.Storing
 
                 entity.ToTable("FK_Pizza_ToppingId", "Pizza");
 
-                entity.Property(e => e.PizzaToppingId).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Pizza)
                     .WithMany(p => p.FkPizzaToppingId)
                     .HasForeignKey(d => d.PizzaId)
@@ -165,8 +155,6 @@ namespace PizzaStore.Storing
             {
                 entity.ToTable("Name", "Agent");
 
-                entity.Property(e => e.NameId).ValueGeneratedNever();
-
                 entity.Property(e => e.Active)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
@@ -180,8 +168,6 @@ namespace PizzaStore.Storing
             {
                 entity.ToTable("Pizza", "Pizza");
 
-                entity.Property(e => e.PizzaId).ValueGeneratedNever();
-
                 entity.Property(e => e.Active)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
@@ -191,6 +177,8 @@ namespace PizzaStore.Storing
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.HasOne(d => d.Crust)
                     .WithMany(p => p.Pizza)
@@ -206,8 +194,6 @@ namespace PizzaStore.Storing
             modelBuilder.Entity<Shop>(entity =>
             {
                 entity.ToTable("Shop", "Agent");
-
-                entity.Property(e => e.ShopId).ValueGeneratedNever();
 
                 entity.Property(e => e.Active)
                     .IsRequired()
@@ -226,26 +212,26 @@ namespace PizzaStore.Storing
             {
                 entity.ToTable("Size", "Pizza");
 
-                entity.Property(e => e.SizeId).ValueGeneratedNever();
-
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.Price).HasColumnType("money");
             });
 
             modelBuilder.Entity<Topping>(entity =>
             {
                 entity.ToTable("Topping", "Pizza");
 
-                entity.Property(e => e.ToppingId).ValueGeneratedNever();
-
                 entity.Property(e => e.DateModified).HasColumnType("datetime2(0)");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.Price).HasColumnType("money");
             });
 
             OnModelCreatingPartial(modelBuilder);

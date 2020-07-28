@@ -26,7 +26,6 @@ namespace PizzaStore.Client
             bool editingPizza = false;
             Domain.Models.Pizza CurrentCustomPizza = null;
             Domain.Models.Pizza CurrentCustomPizzaOld = null;
-            var db = new PizzaStoreDbContext();
             do
             {
                 int input = 0;
@@ -447,47 +446,10 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 Console.WriteLine("Placing Order...");
-                                var order = new CustomerOrder { TotalPrice = (decimal)currentUser.Orders[currentUser.Orders.Count - 1].GetTotalPrice(), OrderedFrom = currentUser.ChosenStore.Name.IdName, DateModified = DateTime.Now, Active = true };
-                                var customerOrder = db.Set<CustomerOrder>();
-                                customerOrder.Add(order);//add order to customerorder table
-                                var customerOrderCustomerFK = new FkCustomerOrderCustomer { CustomerOrderId = order.CustomerOrderId, CustomerId = 1, Active = true };
-                                var customerOrderCustomer = db.Set<FkCustomerOrderCustomer>();
-                                customerOrderCustomer.Add(customerOrderCustomerFK);// add order and username to CustomerOrderCustomer table (to link customers and orders)
+                                var connection = new PizzaStore.Storing.Repositories.OrderRepository();
 
+                                connection.CreateOrderCustomerPizzaRelation(currentUser);
 
-                                foreach (var pizza in currentUser.Orders[currentUser.Orders.Count - 1].Pizzas)// links the pizza to the order
-                                {
-                                    string str = pizza.Size + " " + pizza.Crust;
-                                    int id = -1;
-                                    foreach (var p in db.Pizza)
-                                    {
-                                        if (str == p.Name)
-                                        {
-                                            id = p.PizzaId;
-                                            System.Console.WriteLine(str);
-                                        }
-                                    }
-
-                                    db.FkCustomerOrderPizza.Add(new FkCustomerOrderPizza { PizzaId = id, CustomerOrderId = customerOrderCustomerFK.CustomerId });
-
-                                    /**  foreach (var top in pizza.Toppings)//links the pizza to the toppings
-                                      {
-                                          int topId=-1;
-                                          foreach (var t in db.Topping)
-                                          {
-                                              if(t.Name==top.TopName)
-                                              {
-                                                  topId=t.ToppingId;
-                                              }
-                                          }
-
-                                          db.FkPizzaToppingId.Add(new FkPizzaToppingId{ToppingId=topId, PizzaId=id});
-                                      }
-                                      **/
-                                }
-
-
-                                db.SaveChanges();
                                 menu.currentMenu = 9;
                                 break;
 
@@ -542,7 +504,7 @@ namespace PizzaStore.Client
                         {
                             case 1:
                                 Console.WriteLine("Displaying Orders");
-                                System.Console.WriteLine(CheckOrders(db));
+                                System.Console.WriteLine(new PizzaStore.Storing.Repositories.OrderRepository().ReadOrderData());
                                 break;
 
                             case 2:
@@ -817,55 +779,7 @@ namespace PizzaStore.Client
             } while (!terminateProgram);
         }
 
-        static string CheckOrders(PizzaStoreDbContext db)
-        {
-            var sb = new System.Text.StringBuilder();
-            //take the order id to search through the list of customerordercustomers to find its matching id. 
-            //Then get the customerid off of that and search throught the customers
 
-
-            foreach (var order in db.CustomerOrder.ToList())
-            {
-                foreach (var fkcoc in db.FkCustomerOrderCustomer.ToList())//getting name
-                {
-                    if (order.CustomerOrderId == fkcoc.CustomerOrderId)
-                    {
-                        foreach (var customer in db.Customer.ToList())
-                        {
-                            if (fkcoc.CustomerId == customer.CustomerId)
-                            {
-
-                                foreach (var name in db.Name.ToList())
-                                {
-                                    if (name.NameId == customer.NameId)
-                                    {
-                                        sb.Append(name.NameText + ": .... ");
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-                sb.Append($"${order.TotalPrice}\n");//getting total price
-                //getting pizzas ordered
-                foreach (var orderPizza in db.FkCustomerOrderPizza.ToList())
-                {
-                    if (order.CustomerOrderId == orderPizza.CustomerOrderId)
-                    {
-                        foreach (var pizza in db.Pizza.ToList())
-                        {
-                            if (pizza.PizzaId == orderPizza.PizzaId)
-                            {
-                                sb.Append($"{pizza.Name} \n");
-                                //need to find toppings
-                            }
-                        }
-                    }
-                }
-            }
-            return sb.ToString();
-        }
 
 
 

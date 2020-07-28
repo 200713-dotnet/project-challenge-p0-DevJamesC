@@ -20,7 +20,8 @@ go
 
 create table Pizza.Crust
 (
-    CrustId int not null,
+    CrustId int not null identity(1,1),
+    Price money not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
     Active bit not null default 1,
@@ -29,7 +30,8 @@ create table Pizza.Crust
 
 create table Pizza.Size
 (
-    SizeId int not null,
+    SizeId int not null identity(1,1),
+    Price money not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
     Active bit not null,
@@ -38,10 +40,11 @@ create table Pizza.Size
 
 create table Pizza.Pizza
 (
-    PizzaId int not null,
+    PizzaId int not null identity(1,1),
     CrustId int null,
     SizeId int null,
     Name nvarchar(250) not null,
+    Price money not null,
     DateModified datetime2(0) not null,
     Active bit not null default 1,
     constraint PK_PizzaId primary key (PizzaId),
@@ -51,7 +54,8 @@ create table Pizza.Pizza
 
 create table Pizza.Topping
 (
-    ToppingId int not null,
+    ToppingId int not null identity(1,1),
+    Price money not null,
     Name nvarchar(250) not null,
     DateModified datetime2(0) not null,
     Active bit not null,
@@ -60,7 +64,7 @@ create table Pizza.Topping
 
 create table Pizza.FK_Pizza_ToppingId
 (
-    PizzaToppingId int not null,
+    PizzaToppingId int not null identity(1,1),
     PizzaId int not NULL,
     ToppingId int not null,
     Active bit not null,
@@ -71,7 +75,7 @@ create table Pizza.FK_Pizza_ToppingId
 
 create table Agent.Name
 (
-    NameId int not null,
+    NameId int not null identity(1,1),
     NameText nvarchar(250),
     DateModified datetime2(0) not null,
     Active bit not null default 1,
@@ -80,7 +84,7 @@ create table Agent.Name
 
 create table Agent.Customer
 (
-    CustomerId int not null,
+    CustomerId int not null identity(1,1),
     NameId int not null,
     DateModified datetime2(0) not null,
     Active bit not null default 1,
@@ -90,7 +94,7 @@ create table Agent.Customer
 
 create table Agent.Shop
 (
-    ShopId int not null,
+    ShopId int not null identity(1,1),
     NameId int not null,
     DateModified datetime2(0) not null,
     Active bit not null default 1,
@@ -102,7 +106,7 @@ create table Agent.Shop
 
 create table Agent.CustomerOrder
 (
-    CustomerOrderId int not null,
+    CustomerOrderId int not null identity(1,1),
     totalPrice money not null,
     OrderedFrom nvarchar(250) not null,
     DateModified datetime2(0) not null,
@@ -112,7 +116,7 @@ create table Agent.CustomerOrder
 
 create table Agent.FK_CustomerOrder_Customer
 (
-    CustomerOrderCustomerId int not null,
+    CustomerOrderCustomerId int not null identity(1,1),
     CustomerOrderId int not NULL,
     CustomerId int not null,
     Active bit not null,
@@ -123,7 +127,7 @@ create table Agent.FK_CustomerOrder_Customer
 
 create table Agent.FK_CustomerOrder_Pizza
 (
-    CustomerOrderPizzaId int not null,
+    CustomerOrderPizzaId int not null identity(1,1),
     CustomerOrderId int not NULL,
     PizzaId int not null,
     Active bit not null,
@@ -133,38 +137,28 @@ create table Agent.FK_CustomerOrder_Pizza
 );
 
 INSERT into Agent.NAME
-    (NameId,NameText,DateModified,Active)
-values(1, 'User', '20120618 10:34:09 AM', 1);
-
-INSERT into Agent.NAME
-    (NameId,NameText,DateModified,Active)
-values(2, 'Shop', '20120618 10:34:09 AM', 1);
+    (NameText,DateModified,Active)
+values('User', '20120618 10:34:09 AM', 1),
+( 'Shop', '20120618 10:34:09 AM', 1);
 
 INSERT into Agent.Customer
-    (CustomerId, NameId,DateModified,Active)
+    ( NameId,DateModified,Active)
 values
-    (1, 1, '20120618 10:34:09 AM', 1);
+    ( 1, '20120618 10:34:09 AM', 1);
 
 Insert into Agent.Shop
-    (ShopId,NameId,DateModified,Active)
+    (NameId,DateModified,Active)
 values
-    (1, 2, '20120618 10:34:09 AM', 1);
+    ( 2, '20120618 10:34:09 AM', 1);
 
-insert into pizza.Topping (ToppingId,Name,DateModified,Active)
-VALUEs (0,'Pepperoni','20120618 10:34:09 AM',1);
+insert into pizza.Topping (Name,Price,DateModified,Active)
+VALUEs ('Pepperoni',1,'20120618 10:34:09 AM',1),
+ ('Ham',1.25,'20120618 10:34:09 AM',1),
+ ('Chicken',2,'20120618 10:34:09 AM',1),
+ ('Pineapple',.75,'20120618 10:34:09 AM',1),
+ ('Buffalo Hot Sauce',.25,'20120618 10:34:09 AM',1);
 
-insert into pizza.Topping (ToppingId,Name,DateModified,Active)
-VALUEs (1,'Ham','20120618 10:34:09 AM',1);
-
-insert into pizza.Topping (ToppingId,Name,DateModified,Active)
-VALUEs (2,'Chicken','20120618 10:34:09 AM',1);
-
-insert into pizza.Topping (ToppingId,Name,DateModified,Active)
-VALUEs (3,'Pineapple','20120618 10:34:09 AM',1);
-
-insert into pizza.Topping (ToppingId,Name,DateModified,Active)
-VALUEs (4,'Buffalo Hot Sauce','20120618 10:34:09 AM',1);
-
+--MIGHT NOT NEED THE DEFAULT PIZZA STUFF. IF WE DO, THEN ADD THE PRICE COLUMN TO VALUES
 insert into Pizza.Crust(CrustId,Name,DateModified,Active)
 values(0,'Plain','20120618 10:34:09 AM',1),
 (1,'Stuffed','20120618 10:34:09 AM',1),
@@ -190,6 +184,20 @@ values (0,0,0,'Small Plain','20120618 10:34:09 AM',1),
 
 
 --DESTROY
+delete from Agent.FK_CustomerOrder_Customer;
+delete from Agent.FK_CustomerOrder_Pizza;
+delete from Pizza.FK_Pizza_ToppingId;
+delete from Pizza.Pizza;
+delete from Agent.CustomerOrder;
+delete from Pizza.Crust;
+delete from Pizza.Size;
+
+delete from Agent.Customer;
+delete from Agent.Shop;
+delete from Agent.Name;
+delete from Pizza.Topping;
+
+
 drop table Agent.FK_CustomerOrder_Pizza;
 drop table Pizza.FK_Pizza_ToppingId;
 drop table Pizza.Pizza;
@@ -215,6 +223,9 @@ SELECT *
 from Agent.FK_CustomerOrder_Customer;
 select *
 From Agent.Name;
+select * from Pizza.Pizza;
+select * from Pizza.Crust;
+select * from Pizza.Topping;
 
 
 
