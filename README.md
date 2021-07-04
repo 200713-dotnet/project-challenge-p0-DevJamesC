@@ -1,8 +1,8 @@
 # pizzabox
 
-The goal of the project is to build a Pizza Ordering System.
+The goal of the project is to build a Pizza Ordering System. 
 
-## architecture (REQUIRED)
+## architecture (REQUIRED) [CHECK]
 
 + [solution] PizzaBox.sln
   + [project - console] PizzaBox.Client.csproj
@@ -21,25 +21,25 @@ The project should support objects of User, Store, Order, Pizza.
 
 ### store
 
-+ [required] there should exist at least 2 stores for a user to choose from
++ [required] there should exist at least 2 stores for a user to choose from [CHECK]
 + [required] each store should be able to view/list any and all of their completed/placed orders
 + [required] each store should be able to view/list any and all of their sales (amount of revenue weekly or monthly)
 
 ### order
 
-+ [required] each order must be able to view/list/edit its collection of pizzas
-+ [required] each order must be able to compute its pricing
-+ [required] each order must be limited to a total pricing of no more than $250
-+ [required] each order must be limited to a collection of pizzas of no more than 50
++ [required] each order must be able to view/list/edit its collection of pizzas [CHECK]
++ [required] each order must be able to compute its pricing [CHECK]
++ [required] each order must be limited to a total pricing of no more than $250 [CHECK--NOT-DISPLAYED-TO-USERS]
++ [required] each order must be limited to a collection of pizzas of no more than 50 [CHECK--NOT-DISPLAYED-TO-USERS]
 
 ### pizza
 
-+ [required] each pizza must be able to have a crust
-+ [required] each pizza must be able to have a size
-+ [required] each pizza must be able to have toppings
-+ [required] each pizza must be able to compute its pricing
-+ [required] each pizza must have no less than 2 default toppings
-+ [required] each pizza must limit its toppings to no more 5
++ [required] each pizza must be able to have a crust [CHECK]
++ [required] each pizza must be able to have a size [CHECK]
++ [required] each pizza must be able to have toppings [CHECK]
++ [required] each pizza must be able to compute its pricing [CHECK]
++ [required] each pizza must have no less than 2 default toppings [Check--Not-Enforced-By-Code]
++ [required] each pizza must limit its toppings to no more 5 [CHECK--NOT-DISPLAYED-TO-USERS]
 
 ### user
 
@@ -49,9 +49,9 @@ The project should support objects of User, Store, Order, Pizza.
 
 ## technologies
 
-+ .NET Core - C#
-+ .NET Core - EF + SQL
-+ .NET Core - xUnit
++ .NET Core - C# [CHECK]
++ .NET Core - EF + SQL [CHECK]
++ .NET Core - xUnit [CHECK]
 
 ## timelines
 
@@ -63,27 +63,27 @@ The project should support objects of User, Store, Order, Pizza.
 
 as a user, i should be able to do this:
 
-+ access the application
-+ see a list of locations
-+ select a location
-+ place an order
-+ with either custom or preset pizzas
++ access the application [CHECK]
++ see a list of locations [CHECK]
++ select a location [CHECK]
++ place an order [CHECK]
++ with either custom or preset pizzas [CHECK]
 + if custom
-+ select crust, size and toppings
++ select crust, size and toppings [CHECK]
 + if preset
-+ select pizza and its size
-+ see a tally of my order
-+ add or remove more pizzas
-+ and checkout when complete with latest order
++ select pizza and its size [CHECK]
++ see a tally of my order [CHECK]
++ add or remove more pizzas [Check]
++ and checkout when complete with latest order [CHECK]
 + see my order history
-+ make a new order
++ make a new order [CHECK]
 
 ## store story
 
 as a store, i should be able do this:
 
-+ access the application
-+ select options for order history, sales
++ access the application [CHECK]
++ select options for order history, sales [CHECK]
 + if order history
 + select options for all store orders and orders associated to a user (filtering)
 + if sales
